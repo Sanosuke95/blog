@@ -3,7 +3,7 @@ development:
   encoding: utf8mb4
   database: blog
   pool: 5
-  username: 
+  username:
   password:
   socket: /var/run/mysqld/mysqld.sock
 
