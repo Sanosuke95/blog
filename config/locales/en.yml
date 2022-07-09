@@ -30,4 +30,10 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  pages:
+    home:
+      title: "Home"
+    about:
+      title: "About"
+    contact:
+      title: "Contact"    

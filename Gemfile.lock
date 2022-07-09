@@ -271,6 +271,7 @@ DEPENDENCIES
   capybara
   debase (~> 0.2.5.beta2)
   debug
+  i18n (~> 1.10)
   importmap-rails
   jbuilder
   mysql2 (~> 0.5)
