@@ -15,12 +15,15 @@ gem 'turbo-rails'
 # gem "bcrypt", "~> 3.1.7"
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'bootsnap', require: false
-# gem 'sassc-rails'
+# Theme
+gem 'sassc-rails'
+gem 'bootstrap', '~> 5.1.3'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem 'image_processing', '~> 1.2'
 
 # Internationalization
 gem 'i18n', '~> 1.10'
+
 
 group :development do
   gem 'debase', '~> 0.2.5.beta2', require: false
