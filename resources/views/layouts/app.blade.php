@@ -8,7 +8,7 @@
     </head>
     <body>
         @include('layouts.nav')
-        <div class="container">
+        <div class="container px-4 py-5 my-5">
             @yield('content')
         </div>
     </body>

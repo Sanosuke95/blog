@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +21,7 @@ Route::get('/', function () {
 Route::get('/about', function () {
     return view('static.about');
 })->name('about');
+
+Route::resource('contact', ContactController::class)->only([
+    'create', 'store'
+]);
