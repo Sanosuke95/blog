@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreContactRequest;
 use App\Mail\Contact as MailContact;
 use App\Models\Contact;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class ContactController extends Controller
         return view('static.contact');
     }
 
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
         $contact = Contact::create([
             'email' => $request->email,
