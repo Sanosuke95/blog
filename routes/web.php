@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,3 +26,5 @@ Route::get('/about', function () {
 Route::resource('contact', ContactController::class)->only([
     'create', 'store'
 ]);
+
+Route::resource('posts', PostController::class);
