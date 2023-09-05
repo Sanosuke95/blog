@@ -24,14 +24,8 @@
             </div>
 
             <div class="mb-3">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="status" id="inlineRadio1" value="1" checked>
-                    <label class="form-check-label" for="inlineRadio1">Enable</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="status" id="inlineRadio2" value="0">
-                    <label class="form-check-label" for="inlineRadio2">Disabled</label>
-                </div>
+                <label class="form-check-label" for="inputRadio">Enable</label>
+                <input class="form-check-input" type="checkbox" id="inputRadio" name="status" value="1" aria-label="...">
             </div>
 
             <div class="mb-3">

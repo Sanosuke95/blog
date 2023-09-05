@@ -11,5 +11,6 @@
         <div class="container px-4 py-5 my-5">
             @yield('content')
         </div>
+        @stack('script')
     </body>
 </html>

@@ -16,7 +16,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return view('posts.index', ['posts' => $posts]);
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -24,8 +24,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        $post = [];
-        return view('posts.create', ['post' => $post]);
+        $title = 'Create Post';
+        return view('posts.edit', compact('title'));
     }
 
     /**
@@ -36,7 +36,7 @@ class PostController extends Controller
         $post = Post::create([
             'title' => $request->title,
             'content' => $request->content,
-            'status' => $request->status,
+            'status' => ($request->status) ? $request->status : 0,
             'image' => $request->file('image')->getClientOriginalName()
         ]);
         $validated = $request->validated();
@@ -50,7 +50,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return view('posts.show', compact('post'));
     }
 
     /**
@@ -58,7 +58,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        $title = "Edit post";
+        return view('posts.edit', compact('post', 'title'));
     }
 
     /**
@@ -66,7 +67,16 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        //
+        $post = Post::create([
+            'title' => $request->title,
+            'content' => $request->content,
+            'status' => ($request->status) ? $request->status : 0,
+            'image' => $request->file('image')->getClientOriginalName()
+        ]);
+        $validated = $request->validated();
+        $request->image->storeAs('public', $post['image']);
+        $post->save();
+        return redirect('/posts');
     }
 
     /**
