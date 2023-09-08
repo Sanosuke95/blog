@@ -19,10 +19,17 @@
             @forelse ($posts as $post)
             <tr>
                 <th scope="row">{{ $post->id }}</th>
-                <td><a href="{{ route('posts.show', $post) }}" class="btn btn-link">{{ $post->title }}</a></td>
+                {{-- <td><a href="{{ route('posts.show', $post) }}" class="btn btn-link">{{ $post->title }}</a></td> --}}
+                <td>{{ $post->title }}</td>
                 <td>{{ $post->status }}</td>
                 <td><a href="{{ route('posts.edit', $post->id) }}" class="btn btn-success"><i class="bi bi-pen-fill"></i></a> </td>
-                <td><a href="{{ route('posts.create') }}" class="btn btn-danger"><i class="bi bi-x-circle-fill"></i></a></td>
+                <td>
+                    <form action="{{ route('posts.destroy', $post) }}" method="post">
+                        @csrf
+                        @method("DELETE")
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle-fill"></i></button>
+                    </form>
+                </td>
             </tr>
             @empty
                 <p>Not product</p>

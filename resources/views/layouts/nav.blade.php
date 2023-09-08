@@ -17,4 +17,14 @@
             </div>
         </div>
     </div>
+    {{-- <div class="dropdown">
+        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle"></i>
+        </button>
+        <ul class="dropdown-menu mx-0 border-0 shadow w-220px" data-bs-theme="dark">
+            <li><a class="dropdown-item" href="{{ route('posts.create') }}">New Post</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+    </div> --}}
 </header>
