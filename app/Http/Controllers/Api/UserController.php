@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -28,7 +29,7 @@ class UserController extends Controller
 
             $token = $user->createToken('access_token');
 
-            return response()->json(['token' => $token]);
+            return response()->json(['token' => $token->plainTextToken]);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }
@@ -46,10 +47,25 @@ class UserController extends Controller
                 $user = User::where('email', $credentials['email'])->firstOrFail();
                 $token = $user->createToken('access_token');
 
-                return response()->json(['token' => $token, 'user' => $user]);
+                return response()->json(['token' => $token->plainTextToken, 'user' => new UserResource($user)]);
             } else {
                 return response()->json(['msg' => 'login password error']);
             }
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * User profile
+     */
+    public function profile(Request $request)
+    {
+        try {
+            $user = new UserResource($request->user());
+            return response()->json([
+                'user' => $user,
+            ]);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }

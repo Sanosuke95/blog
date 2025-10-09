@@ -12,3 +12,8 @@ Route::get('/user', function (Request $request) {
 Route::get('/hello', [HelloController::class, 'hello']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('/users')->group(function () {
+        Route::get('/profile', [UserController::class, 'profile']);
+    });
+});
