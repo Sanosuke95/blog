@@ -59,7 +59,7 @@ class UserController extends Controller
     /**
      * User profile
      */
-    public function profile(Request $request)
+    public function profile(Request $request): JsonResponse
     {
         try {
             $user = new UserResource($request->user());
@@ -69,5 +69,16 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * User logout
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->tokens()->delete();
+
+
+        return response()->json(['msg' => 'User logout']);
     }
 }
