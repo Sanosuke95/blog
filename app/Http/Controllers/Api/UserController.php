@@ -28,10 +28,11 @@ class UserController extends Controller
             ]);
 
             $token = $user->createToken('access_token');
+            $msg = "User create";
 
-            return response()->json(['token' => $token->plainTextToken]);
+            return $this->renderResponse(['token' => $token->plainTextToken], $msg);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
+            return $this->renderResponse([], 'error in authentication : ' . $e->getMessage(), 401);
         }
     }
 
@@ -46,13 +47,14 @@ class UserController extends Controller
             if (Auth::attempt($credentials)) {
                 $user = User::where('email', $credentials['email'])->firstOrFail();
                 $token = $user->createToken('access_token');
+                $msg = "User logged";
 
-                return response()->json(['token' => $token->plainTextToken, 'user' => new UserResource($user)]);
+                return $this->renderResponse(['token' => $token->plainTextToken, 'user' => new UserResource($user)], $msg);
             } else {
-                return response()->json(['msg' => 'login password error']);
+                return $this->renderResponse([], 'authentication error ', 401);
             }
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
+            return $this->renderResponse([], 'error in authentication : ' . $e->getMessage(), 401);
         }
     }
 
@@ -63,11 +65,9 @@ class UserController extends Controller
     {
         try {
             $user = new UserResource($request->user());
-            return response()->json([
-                'user' => $user,
-            ]);
+            return $this->renderResponse(['user' => $user], 'User profile');
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
+            return $this->renderResponse([], 'authentication error ', 401);
         }
     }
 
@@ -77,8 +77,6 @@ class UserController extends Controller
     public function logout(Request $request): JsonResponse
     {
         $request->user()->tokens()->delete();
-
-
         return response()->json(['msg' => 'User logout']);
     }
 }
