@@ -10,7 +10,6 @@ function App() {
                 console.log(response);
             });
     }, []);
-    let hello;
     return <h1>Blog</h1>;
 }
 
