@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -44,8 +45,7 @@ class UserController extends Controller
             if (Auth::attempt($credentials)) {
                 $user = User::where('email', $request['email'])->first();
                 $token = $user->createToken('access_token', ['*'], now()->addWeek());
-                $parse = Carbon::parse($token->accessToken->expires_at);
-                return response()->json(['data' => $user, 'token' => $token->plainTextToken, "expires_at" => $parse->format("Y-m-d H:i:s")]);
+                return response()->json(['data' => $user->userFormat($user), 'token' => $token->plainTextToken, "expires_at" => $user->parseDate($token->accessToken->expires_at)]);
             } else {
                 return response()->json(['message' => 'Failed authenticated']);
             }
@@ -66,8 +66,9 @@ class UserController extends Controller
         if (is_null($user)) {
             return response()->json(['message' => 'User not found']);
         }
+        $userResource = new UserResource($user);
 
-        return response()->json(['user' => $user]);
+        return response()->json(['user' => $userResource]);
     }
 
     /**

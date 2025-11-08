@@ -42,8 +42,7 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
             "@php artisan migrate --force",
-            "npm install",
-            "npm run build"
+            "@php artisan db:seed"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
@@ -62,7 +61,8 @@
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:meta",
-            "@php artisan ide-helper:models -RWM"
+            "@php artisan ide-helper:models -RWM",
+            "npm install"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

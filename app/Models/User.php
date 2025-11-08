@@ -4,10 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Http\Resources\UserResource;
 use App\Trait\Uuid;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -52,5 +55,27 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Parse date
+     *
+     * @param string $date
+     * @return string
+     */
+    public function parseDate(string $date): string
+    {
+        return Carbon::parse($date)->format("Y-m-d H:i:s");
+    }
+
+    /**
+     * User resource
+     *
+     * @param User $data
+     * @return JsonResource
+     */
+    public function userFormat(User $data): JsonResource
+    {
+        return new UserResource($data);
     }
 }
