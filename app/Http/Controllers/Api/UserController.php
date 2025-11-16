@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enum\HttpCode;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Response\ApiResponse;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +36,7 @@ class UserController extends Controller
     public function signup(UserRequest $request): JsonResponse
     {
         $user = $this->userService->createUser($request->validated());
-        return response()->json(['data' => $user, 'auth' => $user->addToken($user->createToken('access_token', ['*'], now()->addWeek()))]);
+        return ApiResponse::send(['data' => $user, 'auth' => $user->addToken($user->createToken('access_token', ['*'], now()->addWeek()))], 'User created');
     }
 
     /**
@@ -47,9 +49,9 @@ class UserController extends Controller
     {
         if (Auth::attempt($request->validated())) {
             $user = $this->userService->getUser(['key' => 'email', 'value' => $request['email']]);
-            return response()->json(['data' => $user->userFormat($user), 'auth' => $user->addToken($user->createToken('access_token', ['*'], now()->addWeek()))]);
+            return ApiResponse::send(['user' => $user->userFormat($user), 'auth' => $user->addToken($user->createToken('access_token', ['*'], now()->addWeek()))], 'User logged in.', HttpCode::SUCCESS);
         } else {
-            return response()->json(['message' => 'Failed authenticated']);
+            return ApiResponse::send([], 'Failed authenticated', HttpCode::UNAUTHORIZED);
         }
     }
 
@@ -62,7 +64,7 @@ class UserController extends Controller
     public function profile(String $uuid): JsonResponse
     {
         $user = $this->userService->getUser(['key' => 'uuid', 'value' => $uuid]);
-        return response()->json(['user' => $user->userFormat($user)]);
+        return ApiResponse::send(['user' => $user->userFormat($user)], 'User profile');
     }
 
     /**
@@ -76,9 +78,9 @@ class UserController extends Controller
         $user = Auth::user();
 
         if ($user->uuid !== $uuid)
-            return response()->json(['messages' => 'User not found or already logged out'], 401);
+            return ApiResponse::send([], 'User not found or already logged out', HttpCode::UNAUTHORIZED);
 
         $user->tokens()->delete();
-        return response()->json(['message' => 'logged out']);
+        return ApiResponse::send([], 'logged out');
     }
 }

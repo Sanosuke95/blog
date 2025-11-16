@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Enum\HttpCode;
 use App\Models\User;
+use App\Response\ApiResponse;
 use DB;
 use Exception;
+use Illuminate\Http\JsonResponse;
 
 class UserService
 {
@@ -15,7 +18,7 @@ class UserService
      * @param array $data
      * @return User
      */
-    public function createUser(array $data)
+    public function createUser(array $data): User|JsonResponse
     {
         DB::beginTransaction();
 
@@ -25,13 +28,14 @@ class UserService
 
             return $user;
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()]);
+            return ApiResponse::send([], $e->getMessage(), HttpCode::UNAUTHORIZED);
         }
 
         return $user;
     }
 
-    public function getUser(array $data)
+
+    public function getUser(array $data): User|JsonResponse
     {
         try {
             $user = User::where($data['key'], $data['value'])->first();
