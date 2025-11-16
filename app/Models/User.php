@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\NewAccessToken;
 
 /**
  * @mixin IdeHelperUser
@@ -58,12 +59,26 @@ class User extends Authenticatable
     }
 
     /**
+     * Undocumented function
+     *
+     * @param NewAccessToken $data
+     * @return array
+     */
+    public function addToken(NewAccessToken $data): array
+    {
+        return [
+            'token' => $data->plainTextToken,
+            'expire_at' => $this->parseDate($data->accessToken->expires_at)
+        ];
+    }
+
+    /**
      * Parse date
      *
      * @param string $date
      * @return string
      */
-    public function parseDate(string $date): string
+    protected function parseDate(string $date): string
     {
         return Carbon::parse($date)->format("Y-m-d H:i:s");
     }

@@ -4,16 +4,27 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
-use App\Http\Resources\UserResource;
-use App\Models\User;
-use Exception;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Request;
 
 class UserController extends Controller
 {
+
+    /**
+     * Undocumented variable
+     */
+    protected $userService;
+
+
+    /**
+     * Undocumented function
+     */
+    public function __construct()
+    {
+        $this->userService = new UserService();
+    }
+
     /**
      * User creation
      *
@@ -22,14 +33,8 @@ class UserController extends Controller
      */
     public function signup(UserRequest $request): JsonResponse
     {
-        try {
-            $user = User::create($request->validated());
-            $token = $user->createToken('access_token', ['*'], now()->addWeek());
-            $parse = Carbon::parse($token->accessToken->expires_at);
-            return response()->json(['data' => $user, 'token' => $token->plainTextToken, "expires_at" => $parse->format("Y-m-d H:i:s")]);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()]);
-        }
+        $user = $this->userService->createUser($request->validated());
+        return response()->json(['data' => $user, 'auth' => $user->addToken($user->createToken('access_token', ['*'], now()->addWeek()))]);
     }
 
     /**
@@ -40,17 +45,11 @@ class UserController extends Controller
      */
     public function signin(UserRequest $request): JsonResponse
     {
-        try {
-            $credentials = $request->validated();
-            if (Auth::attempt($credentials)) {
-                $user = User::where('email', $request['email'])->first();
-                $token = $user->createToken('access_token', ['*'], now()->addWeek());
-                return response()->json(['data' => $user->userFormat($user), 'token' => $token->plainTextToken, "expires_at" => $user->parseDate($token->accessToken->expires_at)]);
-            } else {
-                return response()->json(['message' => 'Failed authenticated']);
-            }
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()]);
+        if (Auth::attempt($request->validated())) {
+            $user = $this->userService->getUser(['key' => 'email', 'value' => $request['email']]);
+            return response()->json(['data' => $user->userFormat($user), 'auth' => $user->addToken($user->createToken('access_token', ['*'], now()->addWeek()))]);
+        } else {
+            return response()->json(['message' => 'Failed authenticated']);
         }
     }
 
@@ -62,19 +61,14 @@ class UserController extends Controller
      */
     public function profile(String $uuid): JsonResponse
     {
-        $user = User::where('uuid', $uuid)->first();
-        if (is_null($user)) {
-            return response()->json(['message' => 'User not found']);
-        }
-        $userResource = new UserResource($user);
-
-        return response()->json(['user' => $userResource]);
+        $user = $this->userService->getUser(['key' => 'uuid', 'value' => $uuid]);
+        return response()->json(['user' => $user->userFormat($user)]);
     }
 
     /**
      * Logout user
      *
-     * @param Request $request
+     * @param String $uuid
      * @return JsonResponse
      */
     public function logout(String $uuid): JsonResponse
