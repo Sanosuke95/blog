@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -16,15 +16,11 @@ class UserController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function signin(Request $request): JsonResponse
+    public function signin(UserRequest $request): JsonResponse
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required']
-        ]);
 
-        if (Auth::attempt($credentials)) {
-            $user = User::where('email', $credentials['email'])->firstOrFail();
+        if (Auth::attempt($request->validated())) {
+            $user = User::where('email', $request['email'])->firstOrFail();
             $token = $user->createToken('access_token');
 
             return response()->json(['data' => $user, 'token' => $token]);
@@ -39,15 +35,9 @@ class UserController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function signup(Request $request): JsonResponse
+    public function signup(UserRequest $request): JsonResponse
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-            'name' => ['min:3']
-        ]);
-
-        $user = User::create($credentials);
+        $user = User::create($request->validated());
         $token = $user->createToken('access_token');
 
         return response()->json(['user' => $user, 'token' => $token]);
