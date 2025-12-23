@@ -10,5 +10,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/example', [ExampleController::class, 'hello']);
-Route::get('/contacts', [ContactController::class, 'index']);
-Route::post('/contacts', [ContactController::class, 'store']);
+Route::resource('/contacts', ContactController::class, ['parameters' => ['contacts' => 'uuid']])->only([
+    'index',
+    'show',
+    'store'
+]);
