@@ -2,10 +2,14 @@
 
 namespace App\Services;
 
+use App\Http\Resources\Contact\ContactCollection;
+use App\Http\Resources\Contact\ContactResource;
 use App\Interfaces\ContactInterface;
 use App\Models\Contact;
 use DB;
 use Exception;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ContactService implements ContactInterface
 {
@@ -27,24 +31,24 @@ class ContactService implements ContactInterface
     /**
      * List all contact
      *
-     * @return void
+     * @return ResourceCollection
      */
-    public function listContact()
+    public function listContact(): ResourceCollection
     {
-        return $this->contact->all();
+        return new ContactCollection($this->contact->all());
     }
 
     /**
      * get contact by uuid
      *
      * @param string $uuid
-     * @return void
+     * @return JsonResource
      */
-    public function getContact(string $uuid)
+    public function getContact(string $uuid): JsonResource
     {
         try {
             $contact = $this->contact->firstWhere('uuid', $uuid);
-            return $contact;
+            return $this->contactResponse($contact);
         } catch (\Exception $e) {
             throw $e->getMessage();
         }
@@ -54,18 +58,29 @@ class ContactService implements ContactInterface
      * Create new contact
      * 
      * @param array $data
-     * @return Collection
+     * @return JsonResource
      */
-    public function createContact(array $data)
+    public function createContact(array $data): JsonResource
     {
         DB::beginTransaction();
         try {
             $contact = $this->contact->create($data);
             DB::commit();
-            return $contact;
+            return $this->contactResponse($contact);
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e->getMessage();
         }
+    }
+
+    /**
+     * Return response
+     *
+     * @param Contact $contact
+     * @return JsonResource
+     */
+    protected function contactResponse(Contact $contact): JsonResource
+    {
+        return new ContactResource($contact);
     }
 }

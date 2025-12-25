@@ -4,6 +4,7 @@ namespace App\Interfaces;
 
 use App\Models\Contact;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Collection;
 
 interface ContactInterface
@@ -12,22 +13,22 @@ interface ContactInterface
      * Create new contact
      * 
      * @param array $data
-     * @return Collection
+     * @return JsonResource
      */
-    public function createContact(array $data);
+    public function createContact(array $data): JsonResource;
 
     /**
      * List contact
      * 
-     * @return JsonResource
+     * @return ResourceCollection
      */
-    public function listContact();
+    public function listContact(): ResourceCollection;
 
     /**
      * get contact by uuid
      *
      * @param Contact $contact
-     * @return void
+     * @return JsonResource
      */
-    public function getContact(string $uuid);
+    public function getContact(string $uuid): JsonResource;
 }
