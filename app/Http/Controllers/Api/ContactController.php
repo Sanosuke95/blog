@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\HttpCode;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Contact\ContactCollection;
-use App\Http\Resources\Contact\ContactResource;
+use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
 use App\Services\ContactService;
 use App\Services\ResponseService;
@@ -71,8 +69,8 @@ class ContactController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(ContactRequest $request)
     {
-        return $this->responseService->render($this->contactService->createContact($request->all()), 'contact created');
+        return $this->responseService->render($this->contactService->createContact($request->validated()), 'contact created');
     }
 }
