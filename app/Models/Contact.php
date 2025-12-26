@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Trait\Uuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-    use Uuid;
+    use Uuid, HasFactory;
 
     /**
      * The attributes that are mass assignable.
