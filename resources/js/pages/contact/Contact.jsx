@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Input from "../../components/input/Input";
 import Layout from "../../layouts/Layout";
 import Label from "../../components/label/Label";
 import Textarea from "../../components/textarea/Textarea";
-import { getContacts } from "../../data/contactData";
+import { addContact } from "../../data/contactData";
 
 function Contact() {
     const [formData, setFormData] = useState({
@@ -11,14 +11,6 @@ function Contact() {
         title: "",
         content: "",
     });
-
-    useEffect(() => {
-        const contacts = async () => {
-            const data = await getContacts();
-        };
-
-        contacts();
-    }, []);
 
     const handleOnChange = (e) => {
         const { name, value } = e.target;
@@ -28,9 +20,14 @@ function Contact() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        await addContact(formData);
+        setFormData({
+            email: "",
+            title: "",
+            content: "",
+        });
     };
 
     return (

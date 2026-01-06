@@ -1,4 +1,4 @@
-import { fetchContacts } from "../services/contactService";
+import { createContact, fetchContacts } from "../services/contactService";
 
 async function getContacts() {
     try {
@@ -9,4 +9,13 @@ async function getContacts() {
     }
 }
 
-export { getContacts };
+async function addContact(contact) {
+    try {
+        const response = await createContact(contact);
+        return response.data;
+    } catch (error) {
+        console.log("Error in addContacts", error);
+    }
+}
+
+export { getContacts, addContact };
