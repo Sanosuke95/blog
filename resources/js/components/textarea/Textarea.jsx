@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import "./textarea.css";
 
 function Textarea({ id, name, value, onChange, rows = "10", cols = "30" }) {
     return (

@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
+import "./layout.css";
 
 function Layout({ children }) {
-    return <div>{children}</div>;
+    return <div className="container">{children}</div>;
 }
 
 Layout.propTypes = {

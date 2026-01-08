@@ -33,32 +33,36 @@ function Contact() {
     return (
         <Layout>
             <h1>Contact</h1>
-            <form onSubmit={handleSubmit}>
-                <Label name={"email"}>Email</Label>
-                <Input
-                    name="email"
-                    type="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={handleOnChange}
-                />
-                <Label name={"title"}>Title</Label>
-                <Input
-                    name="title"
-                    type="text"
-                    id="title"
-                    value={formData.title}
-                    onChange={handleOnChange}
-                />
-                <Label name={"content"}>Content</Label>
-                <Textarea
-                    name="content"
-                    id="content"
-                    value={formData.content}
-                    onChange={handleOnChange}
-                />
-                <Input type="submit" />
-            </form>
+            <div className="center">
+                <form onSubmit={handleSubmit}>
+                    <Label name={"email"}>Email</Label>
+                    <Input
+                        name="email"
+                        type="email"
+                        id="email"
+                        value={formData.email}
+                        onChange={handleOnChange}
+                    />
+                    <Label name={"title"}>Title</Label>
+                    <Input
+                        name="title"
+                        type="text"
+                        id="title"
+                        value={formData.title}
+                        onChange={handleOnChange}
+                    />
+                    <Label name={"content"}>Content</Label>
+                    <Textarea
+                        name="content"
+                        id="content"
+                        value={formData.content}
+                        onChange={handleOnChange}
+                    />
+                    <div className="center">
+                        <Input type="submit" />
+                    </div>
+                </form>
+            </div>
         </Layout>
     );
 }

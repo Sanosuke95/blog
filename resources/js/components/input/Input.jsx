@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import "./input.css";
 
 function Input({ type = "text", id, name, placeholder, value, onChange }) {
     return (
