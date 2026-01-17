@@ -11,4 +11,4 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/example', [ExampleController::class, 'hello']);
 
-Route::resource('/contacts', ContactController::class,)->parameters(['contacts' => 'uuid'])->only('index', 'show', 'store');
+Route::resource('/contacts', ContactController::class,)->only('index', 'show', 'store');

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Interface\FormRequestInterface;
+use App\Interfaces\FormRequestInterface;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ContactRequest extends FormRequest implements FormRequestInterface
