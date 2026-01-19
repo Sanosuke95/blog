@@ -18,7 +18,7 @@ class ContactService implements ContactServiceInterface
 
     public function getAllContact()
     {
-        return $this->contact->paginate(5);
+        return $this->contact->orderBy('created_at', 'DESC')->paginate(5);
     }
 
     public function createContact(array $data)

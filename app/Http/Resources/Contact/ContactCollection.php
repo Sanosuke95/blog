@@ -19,12 +19,12 @@ class ContactCollection extends ResourceCollection
                 return new ContactResource($contact);
             }),
             'meta' => [
-                'total' => $this->collection->count(),
-                'per_page' => $this->perPage(),
                 'current_page' => $this->currentPage(),
+                'per_page' => $this->perPage(),
                 'last_page' => $this->lastPage(),
                 'next_page_url' => $this->nextPageUrl(),
-                'prev_page_url' => $this->previousPageUrl()
+                'prev_page_url' => $this->previousPageUrl(),
+                'total' => $this->total(),
             ]
         ];
     }
