@@ -1,22 +1,7 @@
-import { useEffect, useState } from "react";
-import "./bootstrap";
+import react from "react";
 import { createRoot } from "react-dom/client";
-import api from "./services/api";
-
-function App() {
-    const [msg, setMsg] = useState("");
-    useEffect(() => {
-        api.get("/example").then((response) => {
-            setMsg(response.data.msg);
-        });
-    }, []);
-    return (
-        <>
-            <h1>Home</h1>
-            <p>{msg}</p>
-        </>
-    );
-}
+import { RouterProvider } from "react-router";
+import router from "./routes";
 
 const root = createRoot(document.getElementById("root"));
-root.render(<App />);
+root.render(<RouterProvider router={router} />);
