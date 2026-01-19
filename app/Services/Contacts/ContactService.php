@@ -28,10 +28,10 @@ class ContactService implements ContactServiceInterface
             $contact = Contact::create(attributes: $data);
             DB::commit();
 
-            return $contact;
+            return ['status' => true, 'data' => $contact];
         } catch (Exception $e) {
             DB::rollBack();
-            return "Error in creation : " . $e->getMessage();
+            return ['status' => false, 'message' => "Error in creation : " . $e->getMessage()];
         }
     }
 }

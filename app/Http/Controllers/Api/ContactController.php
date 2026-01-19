@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enum\HttpCode;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactRequest;
 use App\Http\Resources\Contact\ContactCollection;
@@ -20,16 +21,17 @@ class ContactController extends Controller
 
     public function index(): JsonResponse
     {
-        return response()->json(new ContactCollection($this->contactService->getAllContact()));
+        return $this->successResponse('List contact', new ContactCollection($this->contactService->getAllContact()));
     }
 
     public function show(Contact $contact): JsonResponse
     {
-        return response()->json(['contact' => new ContactResource($contact)]);
+        return $this->successResponse('Contact', new ContactResource(resource: $contact));
     }
 
     public function store(ContactRequest $request): JsonResponse
     {
-        return response()->json(new ContactResource($this->contactService->createContact($request->validated())));
+        $contact = $this->contactService->createContact($request->validated());
+        return $contact['status'] ? $this->successResponse('Contact created', new ContactResource(resource: $contact['data']), HttpCode::Created) : $this->errorResponse($contact['message'], HttpCode::UnprocessableEntity);
     }
 }

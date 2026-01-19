@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Trait\Uuid;
+use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
