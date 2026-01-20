@@ -1,7 +1,15 @@
 import PropTypes from "prop-types";
 import "./input.css";
 
-function Input({ type = "text", id, name, placeholder, value, onChange }) {
+function Input({
+    type = "text",
+    id,
+    name,
+    placeholder,
+    value,
+    onChange,
+    className,
+}) {
     return (
         <>
             <input
@@ -11,6 +19,7 @@ function Input({ type = "text", id, name, placeholder, value, onChange }) {
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
+                className={className}
             />
         </>
     );
@@ -23,6 +32,7 @@ Input.propType = {
     placeholder: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.object,
+    className: PropTypes.string,
 };
 
 export default Input;

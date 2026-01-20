@@ -4,6 +4,7 @@ import Label from "../components/label/Label";
 import Layout from "../components/layouts/layout/Layout";
 import Textarea from "../components/textarea/Textarea";
 import { addContact } from "../data/contactData";
+import formValidate from "../utils/formValidate";
 
 function Contact() {
     const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ function Contact() {
         title: "",
         content: "",
     });
+    const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,7 +24,9 @@ function Contact() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        setErrors(formValidate(formData));
+        document.getElementById("email").classList.add("error-form");
+        return false;
         await addContact(formData);
     };
 
@@ -38,8 +42,12 @@ function Contact() {
                         type="email"
                         placeholder="Email..."
                         onChange={handleChange}
-                        // value={formData.email}
+                        value={formData.email}
+                        className={errors.email ? "error-form" : ""}
                     />
+                    {errors.email && (
+                        <p style={{ color: "red" }}>{errors.email}</p>
+                    )}
                 </div>
                 <div>
                     <Label htmlFor="title">Title</Label>
@@ -48,7 +56,8 @@ function Contact() {
                         name="title"
                         placeholder="Title..."
                         onChange={handleChange}
-                        // value={formData.title}
+                        value={formData.title}
+                        className={errors.title ? "error-form" : ""}
                     />
                 </div>
                 <div>
@@ -59,7 +68,8 @@ function Contact() {
                         placeholder="content..."
                         row="10"
                         onChange={handleChange}
-                        // value={formData.content}
+                        value={formData.content}
+                        className={errors.content ? "error-form" : ""}
                     />
                 </div>
                 <Input type="submit" />

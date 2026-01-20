@@ -18,3 +18,8 @@ h3 {
     padding: 20px 40px;
     margin: 0 auto;
 }
+
+.error-form {
+    border: 1px solid red;
+    border-color: red;
+}
