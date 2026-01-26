@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const api = axios.create({
+const apiService = axios.create({
     baseURL: "http://127.0.0.1:8000/api",
     timeout: 2000,
     headers: {
@@ -9,4 +9,4 @@ const api = axios.create({
     },
 });
 
-export default api;
+export default apiService;
