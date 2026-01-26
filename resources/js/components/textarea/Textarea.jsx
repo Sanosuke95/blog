@@ -9,6 +9,7 @@ function Textarea({
     row = "5",
     value,
     onChange,
+    className,
 }) {
     return (
         <>
@@ -20,6 +21,7 @@ function Textarea({
                 rows={row}
                 value={value}
                 onChange={onChange}
+                className={"form-input" + " " + className}
             />
         </>
     );

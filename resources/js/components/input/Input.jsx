@@ -19,7 +19,7 @@ function Input({
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
-                className={className}
+                className={"form-input " + className}
             />
         </>
     );
