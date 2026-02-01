@@ -5,6 +5,8 @@ namespace App\Services\Users;
 use App\Models\User;
 use DB;
 use Exception;
+use Illuminate\Http\Request;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class UserService implements UserServiceInterface
 {
@@ -21,10 +23,23 @@ class UserService implements UserServiceInterface
         $this->user->orderBy('created_at', 'DESC')->paginate(10);
     }
 
-    public function getUserByEmail(string $email): array
+    public function getUserByEmail(string $email)
     {
         try {
             $user = $this->user->where('email', operator: $email)->firstOrFail();
+            return $user;
+        } catch (Exception $e) {
+            return ['status' => false, 'message' => 'Error in get : ' . $e->getMessage()];
+        }
+    }
+
+    public function getUserByToken(Request $request)
+    {
+        $currentToken = $request->bearerToken();
+        try {
+            $token = PersonalAccessToken::findToken($currentToken);
+            $user = $token->tokenable;
+
             return $user;
         } catch (Exception $e) {
             return ['status' => false, 'message' => 'Error in get : ' . $e->getMessage()];

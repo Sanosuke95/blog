@@ -2,6 +2,8 @@
 
 namespace App\Services\Users;
 
+use Illuminate\Http\Request;
+
 interface UserServiceInterface
 {
     public function getAllUser();
@@ -9,4 +11,6 @@ interface UserServiceInterface
     public function createUser(array $data);
 
     public function getUserByEmail(string $email);
+
+    public function getUserByToken(Request $request);
 }

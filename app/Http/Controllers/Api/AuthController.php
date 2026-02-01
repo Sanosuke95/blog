@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enum\HttpCode;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
-use App\Models\User;
+use App\Http\Resources\User\TokenResource;
+use App\Http\Resources\User\UserResource;
 use App\Services\Auth\AuthServiceInterface;
 use App\Services\Users\UserServiceInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -23,39 +25,43 @@ class AuthController extends Controller
         $this->authServiceInterface = $authServiceInterface;
     }
 
-    public function login(AuthRequest $request)
+    public function login(AuthRequest $request): JsonResponse
     {
         if (!Auth::attempt($request->validated())) {
-            return response()->json(['message' => 'Authentifiation failed'], 401);
+            return $this->errorResponse('Authentifiation failed', HttpCode::Unauthenticated);
         }
 
-        $user = $this->authServiceInterface->generateToken($request->user());
+        $token = $this->authServiceInterface->generateToken($request->user());
 
-        return response()->json(['user' => $user]);
+        return $this->successResponse('User logged in', $token);
     }
 
-    public function register(AuthRequest $request)
+    public function register(AuthRequest $request): JsonResponse
     {
         $user = $this->userServiceInterface->createUser($request->validated());
-        // $token = $this->authServiceInterface->generateToken($user);
+        $token = $this->authServiceInterface->generateToken($this->userServiceInterface->getUserByEmail($user['email']));
 
-        return response()->json(['user' => $user]);
+        return $this->successResponse('User created', $token);
     }
 
-    public function profile(User $user)
+    public function profile(Request $request): JsonResponse
     {
-        return response()->json(['user' => $user]);
+        $user = $this->userServiceInterface->getUserByToken($request);
+        return $this->successResponse('User profile', new UserResource($user));
     }
 
-    public function refreshToken(Request $request) {}
-
-    private function addToken(User $user, string $name, array $colunm = ['*'], int $expire_at = 1)
+    public function refreshToken(Request $request)
     {
-        return $user->createToken($name, $colunm, Carbon::now()->addDay($expire_at));
+        $token = $this->authServiceInterface->refreshToken($request);
+
+        return $this->successResponse('Token refresh', $token);
     }
 
-    private function parseDate(string $date)
+    public function logout(Request $request): JsonResponse
     {
-        return Carbon::parse($date)->format('Y-m-d H:i:s');
+        $user = $this->userServiceInterface->getUserByToken($request);
+        $user->tokens()->delete();
+
+        return $this->successResponse('User logout');
     }
 }
